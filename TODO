@@ -1,0 +1,13 @@
+A few things that could be hacked on.
+
+Remove httpsig key fetching from the input path.
+	If the key is known, check signature and reply 200 or 401.
+	If the key is unknown, immediately reply 202 and process later.
+
+The gob encoding for backend rpc uses more memory than needed.
+	A custom encoding could reduce allocations.
+	Maybe the backend could fetch the data itself.
+
+Several columns and indices have potentially long shared prefixes.
+	These could be stored rearranged, perhaps with last four bytes prepended.
+	https://here/there/9876 -> 9876https://here/there/9876

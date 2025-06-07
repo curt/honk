@@ -1,0 +1,7 @@
+{{ $BonkCSRF := .HonkCSRF }}
+{{ $MapLink := .MapLink }}
+{{ $Badonk := .User.Options.Reaction }}
+{{ $UserURL := .User.URL }}
+{{ range .Honks }}
+{{ template "honk.html" map "Honk" . "MapLink" $MapLink "BonkCSRF" $BonkCSRF "Badonk" $Badonk "UserURL" $UserURL }}
+{{ end }}

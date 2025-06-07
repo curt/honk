@@ -1,0 +1,125 @@
+<article id="{{ .Honk.ShortXID }}" class="honk {{ .Honk.Style }}" data-convoy="{{ .Honk.Convoy }}" data-hname="{{ .Honk.Handles }}" data-xid="{{ .Honk.XID }}" data-id="{{ .Honk.ID }}">
+{{ $bonkcsrf := .BonkCSRF }}
+{{ $IsPreview := .IsPreview }}
+{{ $maplink := .MapLink }}
+{{ with .Honk }}
+<header>
+{{ if $bonkcsrf }}
+<a class="honkerlink" href="/h?xid={{ .Honker }}" data-xid="{{ .Honker }}">
+{{ else }}
+<a href="{{ .Honker }}" rel=noreferrer>
+{{ end }}
+<img alt="" src="/a?a={{ .Honker}}">
+</a>
+{{ if .Oonker }}
+{{ if $bonkcsrf }}
+<a class="honkerlink" href="/h?xid={{ .Oonker }}" data-xid="{{ .Oonker }}">
+{{ else }}
+<a href="{{ .Oonker }}" rel=noreferrer>
+{{ end }}
+<img alt="" src="/a?a={{ .Oonker}}">
+</a>
+{{ end }}
+<p>
+{{ if $bonkcsrf }}
+<a class="honkerlink" href="/h?xid={{ .Honker }}" data-xid="{{ .Honker }}">{{ .Username }}</a>
+{{ else }}
+<a href="{{ .Honker }}" rel=noreferrer>{{ .Username }}</a>
+{{ end }}
+<span class="clip"><a href="{{ .URL }}" rel=noreferrer>{{ .What }}</a> {{ .Date.Local.Format "02 Jan 2006 15:04 -0700" }}</span>
+{{ if .Oonker }}
+<br>
+<span class="left1em clip">
+{{ if $bonkcsrf }}
+original: <a class="honkerlink" href="/h?xid={{ .Oonker }}" data-xid="{{ .Oonker }}">{{ .Oondle }}</a>
+{{ else }}
+original: <a href="{{ .Oonker }}" rel=noreferrer>{{ .Oondle }}</a>
+{{ end }}
+</span>
+{{ else }}
+{{ if .RID }}
+<br>
+<span class="left1em clip">
+in reply to: <a href="{{ .RID }}" rel=noreferrer>{{ .RID }}</a>
+</span>
+{{ end }}
+{{ end }}
+<br>
+{{ if $bonkcsrf }}
+<span class="left1em clip">convoy: <a class="convoylink" href="/t?c={{ .Convoy }}#{{ .ShortXID }}">{{ .Convoy }}</a></span>
+{{ end }}
+</header>
+<p>
+<details class="noise" {{ with .Open }}{{.}}{{end}}>
+<summary class="noise">{{ .HTPrecis }}<p></summary>
+<p>{{ .HTPrecis }}
+<p class="content">{{ .HTML }}
+{{ if .Link }}
+<p><a href="{{ .Link }}">{{ or .LegalName .Link }}</a>
+{{ end }}
+{{ with .Time }}
+<p>Time: {{ .StartTime.Local.Format "03:04PM MST Mon Jan 02"}}
+{{ if .Duration }}<br>Duration: {{ .Duration }}{{ end }}</p>
+{{ end }}
+{{ with .Place }}
+<p>Location: {{ with .Url }}<a href="{{ . }}" rel=noreferrer>{{ end }}{{ .Name }}{{ if .Url }}</a>{{ end }}{{ if or .Latitude .Longitude }} <a href="{{ if eq $maplink "apple" }}https://maps.apple.com/?q={{ or .Name "here" }}&z=16&ll={{ .Latitude }},{{ .Longitude }}{{ else }}https://www.openstreetmap.org/?mlat={{ .Latitude }}&mlon={{ .Longitude}}#map=16/{{ .Latitude }}/{{ .Longitude }}{{ end }}" rel=noreferrer>{{ .Latitude }} {{ .Longitude }}</a></p>{{ end }}
+{{ end }}
+{{ range .Donks }}
+{{ .HTML }}
+{{ end }}
+</details>
+{{ end }}
+{{ if and $bonkcsrf (not $IsPreview) }}
+<p>
+<details class="actions">
+<summary>Actions</summary>
+<div>
+<p>
+{{ if .Honk.Public }}
+{{ if .Honk.IsBonked }}
+<button class="unbonk">unbonk</button>
+{{ else }}
+<button class="bonk">bonk</button>
+{{ end }}
+{{ else }}
+<button disabled>nope</button>
+{{ end }}
+<button class="honkback"><a href="/newhonk?rid={{ .Honk.XID }}">honk back</a></button>
+<button class="mute">mute</button>
+<button class="evenmore">even more</button>
+</div>
+<div id="evenmore{{ .Honk.ID }}" class="hide">
+<p>
+<button class="zonk">zonk</button>
+{{ if .Honk.IsAcked }}
+<button class="flogit-deack">deack</button>
+{{ else }}
+<button class="flogit-ack" >ack</button>
+{{ end }}
+{{ if .Honk.IsSaved }}
+<button class="flogit-unsave">unsave</button>
+{{ else }}
+<button class="flogit-save">save</button>
+{{ end }}
+{{ if .Honk.IsUntagged }}
+<button disabled>untagged</button>
+{{ else }}
+<button class="flogit-untag">untag me</button>
+{{ end }}
+{{ if eq .Honk.Honker .UserURL }}
+<button><a href="/edit?xid={{ .Honk.XID }}">edit</a></button>
+{{ else }}
+<button disabled>nope</button>
+{{ end }}
+{{ if not (eq .Badonk "none") }}
+{{ if .Honk.IsReacted }}
+<button disabled>badonked</button>
+{{ else }}
+<button class="flogit-react" >{{ .Badonk }}</button>
+{{ end }}
+{{ end }}
+</div>
+</details>
+<p>
+{{ end }}
+</article>

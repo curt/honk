@@ -1,0 +1,40 @@
+{{ template "header.html" . }}
+<main>
+<div class="info" id="infobox">
+<div id="srvmsg">
+<div>
+{{ if .Name }}
+<p>{{ .Name }} <span class="left1em"><a href="/u/{{ .Name }}/rss">rss</a></span>
+<p>{{ .WhatAbout }}
+{{ end }}
+{{ .ServerMessage }}
+</div>
+</div>
+{{ if .HonkCSRF }}
+{{ template "honkform.html" . }}
+<script src="/honkpage.js{{ .JSParam }}" defer data-csrf="{{ .HonkCSRF }}" data-pagename="{{ .PageName }}" data-pagearg="{{ .PageArg }}" data-tophid="{{ .TopHID }}" data-srvmsg="{{ .ServerMessage }}"></script>
+{{ end }}
+{{ if .LocalJSParam }}
+<script src="/local.js{{ .LocalJSParam }}" defer></script>
+{{ end }}
+</div>
+{{ if and .HonkCSRF (not .IsPreview) }}
+<div class="info" id="refreshbox">
+<p><button id="honkrefresher" class="refresh">refresh</button><span></span>
+<button id="newerscroller" class="scrolldown">scroll down</button>
+</div>
+{{ end }}
+<div id="honksonpage">
+<div>
+{{ $BonkCSRF := .HonkCSRF }}
+{{ $IsPreview := .IsPreview }}
+{{ $MapLink := .MapLink }}
+{{ $Badonk := .User.Options.Reaction }}
+{{ $UserURL := .User.URL }}
+{{ range .Honks }}
+{{ template "honk.html" map "Honk" . "MapLink" $MapLink "BonkCSRF" $BonkCSRF "IsPreview" $IsPreview "Badonk" $Badonk "UserURL" $UserURL }}
+{{ end }}
+</div>
+</div>
+</main>
+<div class="footpad"></div>
