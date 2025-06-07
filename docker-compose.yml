@@ -1,0 +1,12 @@
+services:
+  honk:
+    build: .
+    image: honk
+    ports:
+      - "127.0.0.1:7777:8000"
+    volumes:
+      - honkdata:/app/data
+    restart: unless-stopped
+
+volumes:
+  honkdata:
