@@ -1,5 +1,7 @@
 FROM golang:1-alpine AS builder
 
+LABEL org.opencontainers.image.source="https://github.com/curt/honk"
+
 RUN apk add --no-cache git sqlite sqlite-dev build-base
 WORKDIR /app
 COPY . .

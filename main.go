@@ -170,8 +170,8 @@ func main() {
 		memprofilefd = f
 	}
 
-	if os.Geteuid() == 0 {
-		log.Fatalf("do not run honk as root")
+	if os.Geteuid() == 0 && os.Getenv("ALLOW_HONK_ROOT") != "true" {
+		log.Fatalf("do not run honk as root (set ALLOW_HONK_ROOT=true to override)")
 	}
 	err := os.Mkdir(dataDir+"/attachments", 0700)
 	if err != nil && !errors.Is(err, fs.ErrExist) {
